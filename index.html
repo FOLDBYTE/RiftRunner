@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>Rift Runner - Space Flight Game</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Main Game Canvas -->
+    <canvas id="gameCanvas"></canvas>
+    
+    <!-- HUD Overlay -->
+    <div id="hud" class="hidden">
+        <div class="hud-top">
+            <div class="hud-left">
+                <div class="stat-bar">
+                    <span class="stat-label">SHIELD</span>
+                    <div class="bar-container">
+                        <div id="shieldBar" class="bar shield-bar"></div>
+                    </div>
+                    <span id="shieldText" class="stat-value">100</span>
+                </div>
+                <div class="stat-bar">
+                    <span class="stat-label">HEALTH</span>
+                    <div class="bar-container">
+                        <div id="healthBar" class="bar health-bar"></div>
+                    </div>
+                    <span id="healthText" class="stat-value">100</span>
+                </div>
+                <div class="stat-bar">
+                    <span class="stat-label">MISSILES</span>
+                    <div class="ammo-display">
+                        <span id="ammoDisplay">🚀 12</span>
+                    </div>
+                </div>
+            </div>
+            <div class="hud-center">
+                <div id="levelDisplay">LEVEL 1</div>
+                <div id="timerDisplay">15.0</div>
+            </div>
+            <div class="hud-right">
+                <div class="score-display">
+                    <span class="stat-label">SCORE</span>
+                    <span id="scoreDisplay" class="score-value">0</span>
+                </div>
+                <div class="score-display">
+                    <span class="stat-label">TIME</span>
+                    <span id="timeDisplay" class="score-value">0:00</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Landing HUD -->
+    <div id="landingHud" class="hidden">
+        <div class="landing-stats">
+            <div class="landing-stat">
+                <span class="stat-label">FUEL</span>
+                <div class="bar-container fuel-bar-container">
+                    <div id="fuelBar" class="bar fuel-bar"></div>
+                </div>
+                <span id="fuelText" class="stat-value">100%</span>
+            </div>
+            <div class="landing-stat">
+                <span class="stat-label">V-SPEED</span>
+                <span id="vSpeedDisplay" class="velocity-value">0</span>
+            </div>
+            <div class="landing-stat">
+                <span class="stat-label">H-SPEED</span>
+                <span id="hSpeedDisplay" class="velocity-value">0</span>
+            </div>
+            <div class="landing-stat">
+                <span class="stat-label">ANGLE</span>
+                <span id="angleDisplay" class="velocity-value">0°</span>
+            </div>
+        </div>
+        <div class="landing-instructions">
+            <p>🎯 Land on the platform! ⬅️➡️ Rotate | ⬆️/W Thrust</p>
+            <p>⚠️ Land slowly (V &lt; 50, H &lt; 30) and level (±15°)!</p>
+        </div>
+    </div>
+    
+    <!-- Mobile Controls -->
+    <div id="mobileControls" class="hidden">
+        <div id="rotateLeftBtn" class="mobile-btn rotate-btn">↺</div>
+        <div id="thrustBtn" class="mobile-btn thrust-btn">🔥</div>
+        <div id="rotateRightBtn" class="mobile-btn rotate-btn">↻</div>
+        <div id="fireBtn" class="mobile-btn fire-btn">🚀</div>
+    </div>
+    
+    <!-- Main Menu -->
+    <div id="mainMenu" class="overlay">
+        <div class="menu-container">
+            <h1 class="game-title">RIFT<br>RUNNER</h1>
+            <p class="game-subtitle">Navigate through the asteroid field</p>
+            <button id="startBtn" class="menu-btn primary">START GAME</button>
+            <div class="instructions">
+                <h3>CONTROLS</h3>
+                <p><strong>Rotate:</strong> ⬅️➡️ Arrow Keys or A/D</p>
+                <p><strong>Thrust:</strong> ⬆️ Arrow Up or W</p>
+                <p><strong>Fire Missile:</strong> Space</p>
+                <p><strong>Pause:</strong> P or Escape</p>
+            </div>
+            <div class="instructions">
+                <h3>OBJECTIVE</h3>
+                <p>Survive and destroy asteroids!</p>
+                <p>Every 5 levels: Land at station to restock missiles</p>
+                <p>⚠️ Land carefully on the platform!</p>
+            </div>
+            <div id="bestScoreMenu" class="best-score hidden">
+                BEST: <span id="bestScoreValue">0</span>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Pause Menu -->
+    <div id="pauseMenu" class="overlay hidden">
+        <div class="menu-container">
+            <h2>PAUSED</h2>
+            <button id="resumeBtn" class="menu-btn primary">RESUME</button>
+            <button id="restartPauseBtn" class="menu-btn">RESTART</button>
+            <button id="quitBtn" class="menu-btn">MAIN MENU</button>
+        </div>
+    </div>
+    
+    <!-- Station Menu -->
+    <div id="stationMenu" class="overlay hidden">
+        <div class="menu-container station-container">
+            <h2 class="station-title">🛸 STATION REACHED</h2>
+            <p class="station-subtitle">Docking successful! Choose your repairs:</p>
+            <div class="station-stats">
+                <div class="station-stat">
+                    <span>Health:</span>
+                    <span id="stationHealth">100/100</span>
+                </div>
+                <div class="station-stat">
+                    <span>Shield:</span>
+                    <span id="stationShield">100/100</span>
+                </div>
+                <div class="station-stat">
+                    <span>Missiles:</span>
+                    <span id="stationMissiles">12/12</span>
+                </div>
+            </div>
+            <div class="station-options">
+                <button id="repairAllBtn" class="menu-btn primary">REPAIR ALL & CONTINUE</button>
+                <button id="continueBtn" class="menu-btn">CONTINUE WITHOUT REPAIR</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Checkpoint Announcement -->
+    <div id="checkpointBanner" class="checkpoint-banner hidden">
+        <span>⚠️ CHECKPOINT AHEAD - PREPARE FOR LANDING ⚠️</span>
+    </div>
+    
+    <!-- Game Over Screen -->
+    <div id="gameOver" class="overlay hidden">
+        <div class="menu-container">
+            <h2 class="game-over-title">GAME OVER</h2>
+            <p id="deathReason" class="death-reason"></p>
+            <div class="final-stats">
+                <div class="stat-row">
+                    <span>Level Reached</span>
+                    <span id="finalLevel">1</span>
+                </div>
+                <div class="stat-row">
+                    <span>Time Survived</span>
+                    <span id="finalTime">0:00</span>
+                </div>
+                <div class="stat-row">
+                    <span>Final Score</span>
+                    <span id="finalScore">0</span>
+                </div>
+                <div class="stat-row highlight" id="newBestRow">
+                    <span>🏆 NEW BEST!</span>
+                    <span id="newBestScore">0</span>
+                </div>
+            </div>
+            <button id="restartBtn" class="menu-btn primary">PLAY AGAIN</button>
+            <button id="menuBtn" class="menu-btn">MAIN MENU</button>
+        </div>
+    </div>
+    
+    <!-- Level Banner -->
+    <div id="levelBanner" class="level-banner hidden">
+        <span id="levelBannerText">LEVEL 1</span>
+    </div>
+    
+    <!-- Floating Text Container -->
+    <div id="floatingTexts"></div>
+    
+    <script src="game.js"></script>
+</body>
+</html>
