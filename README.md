@@ -4,6 +4,14 @@
 
 Built with pure **HTML5 Canvas + vanilla JavaScript + CSS** — **no frameworks, no dependencies**.
 
+## 🔗 Live Demo
+
+Play here: https://riftrunner.foldbyte.cz/
+
+## 📸 Screenshot
+![Rift Runner menu](./screenshot1.png)
+![Rift Runner gameplay](./screenshot2.png)
+
 ---
 
 ## 🎮 Gameplay
@@ -31,10 +39,11 @@ Levels are based on **distance traveled**:
 - **SPACE** : shoot
 
 ### Mobile
-- Touch controls (if enabled in your build):  
-  - Left side: steer left  
-  - Right side: steer right  
-  - Optional thrust button (depends on your current UI)
+- Touch controls:
+  - **Left side**: rotate left
+  - **Right side**: rotate right
+  - **Bottom-center**: thrust  
+  - Multi-touch supported (thrust + rotate)
 
 ---
 
@@ -53,13 +62,64 @@ Levels are based on **distance traveled**:
 1. Clone/download the repository
 2. Open `index.html` in your browser
 
-> Some browsers may restrict certain features when opening files directly (e.g., audio, localStorage in some modes). If anything behaves oddly, use Option 2.
+> Some browsers may restrict certain features when opening files directly (e.g., audio). If anything behaves oddly, use Option 2.
 
 ### Option 2: Run a local server (recommended)
 
 #### Using Python
 From the project folder:
 
-**Python 3**
 ```bash
 python -m http.server 8000
+```
+
+Open:
+- http://localhost:8000
+
+#### Using Node.js (http-server)
+```bash
+npx http-server -p 8000
+```
+
+Open:
+- http://localhost:8000
+
+---
+
+## 📁 Project Structure
+
+```text
+.
+├── index.html      # Canvas + UI layout
+├── style.css       # Styling
+├── game.js         # Game logic (rendering, physics, collisions, levels)
+├── screenshot.png  # Screenshot used in README
+├── README.md
+└── LICENSE
+```
+
+---
+
+## ⚙️ Tuning & Customization
+
+Most gameplay feel can be adjusted in `game.js`. Common knobs:
+- Base scroll speed and difficulty scaling
+- Rocket turn acceleration / max turn rate
+- Shield/health values and collision damage
+- Pickup spawn rates and effects
+- Asteroid spawn rules per level
+
+---
+
+## 🤝 Contributing
+
+PRs and issues are welcome. If you want to contribute:
+1. Fork the repo
+2. Create a feature branch
+3. Submit a pull request with a clear description
+
+---
+
+## 📜 License
+
+MIT License — see `LICENSE` for details.
